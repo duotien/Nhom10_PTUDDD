@@ -10,6 +10,12 @@ import {
     View,
 } from 'react-native';
 
+import {
+    CellSize,
+    BorderWidth,
+    CellTextSize,
+} from './component/GlobalStyle';
+
 // Sudoku = require('sudoku');
 import * as Sudoku from 'sudoku';
 var _ = require('lodash');
@@ -41,7 +47,7 @@ export default class Main extends Component {
         this.newGame = this.newGame.bind(this);
         this.solvePuzzle = this.solvePuzzle.bind(this);
         this.generateBoard = this.generateBoard.bind(this);
-        
+        this.boardMatches = this.boardMatches.bind(this);
         //console.log(_.chunk(this.state.puzzle,9));
     }
 
@@ -52,9 +58,18 @@ export default class Main extends Component {
         var y = gridpoint[1];
         puzzle[x][y] = parseInt(--input);
 
-        if (Sudoku.boardmatches(_.flatten(puzzle), solved)) {
+        if (this.boardMatches(_.flatten(puzzle), solved)) {
             Alert.alert('Game Solved');
         }
+    }
+
+    boardMatches(b1, b2) {
+        for (var i = 0; i < 81; i++) {
+            if (b1[i] != b2[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     newGame() {
@@ -150,24 +165,17 @@ const styles = StyleSheet.create({
     },
     container: {
         alignSelf: 'center',
-        width: 320,
+        width: CellSize * 9,
         borderWidth: 3,
         borderTopWidth: 2,
         borderBottomWidth: 2,
     },
-    containeralt: {
-        alignSelf: 'center',
-        width: 320,
-        
-        //borderWidth: 3,
-        //borderTopWidth: 2,
-        //borderBottomWidth: 2,
-    },
     row: {
+        //flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         //marginTop: 35,
-        height: 40,
+        //height: 40,
     },
     rowSeperator: {
         borderBottomWidth: 2,
@@ -175,22 +183,23 @@ const styles = StyleSheet.create({
     textInput: {
         paddingBottom: 2,
         paddingLeft: 10,
-        height: 40,
-        fontSize: 25,
+        height: CellSize,
+        fontSize: CellTextSize,
         backgroundColor: 'rgba(0, 0, 255, .1)'
     },
     block: {
         flex: 1,
         justifyContent: 'center',
         borderWidth: 1 / PixelRatio.get(),
-        height: 40,
+        height: CellSize, //40
     },
     blockSeperator: {
         borderRightWidth: 2,
     },
     blockText: {
-        fontSize: 25,
-        paddingTop: 4,
+        fontSize: CellTextSize,
+        alignItems: 'center',
+        justifyContent: 'center',
         alignSelf: 'center',
     },
 });

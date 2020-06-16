@@ -7,6 +7,8 @@ import App from './App';
 import {name as appName} from './app.json';
 
 import Main from './Main';
-import Cell from './Cell';
+//import Cell from './component/Cell';
+//import CellOld from './CellOld';
+//import Grid from './Grid';
 
-AppRegistry.registerComponent(appName, () => Cell);
+AppRegistry.registerComponent(appName, () => Main);
