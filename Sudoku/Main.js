@@ -8,12 +8,14 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity,
     View,
+    Button,
 } from 'react-native';
 
 import {
     CellSize,
     BorderWidth,
     CellTextSize,
+    Color,
 } from './component/GlobalStyle';
 
 // Sudoku = require('sudoku');
@@ -23,15 +25,13 @@ var puzzle;
 //import SudokuGrid from 'react-native-smart-sudoku-grid';
 
 //this is a single Cell in a Sudoku board
-
-class SudokuBoard extends Component {
-    
-    render () {
+class Cell extends Component {
+    render() {
         return (
-            <View>
-                <Text>Hello</Text>
-                <Text>Hello</Text>
-                <Text>Hello</Text>
+            <View style={styles.cell}>
+                <TouchableOpacity>
+                    
+                </TouchableOpacity>
             </View>
         );
     }
@@ -57,6 +57,8 @@ export default class Main extends Component {
         var x = gridpoint[0];
         var y = gridpoint[1];
         puzzle[x][y] = parseInt(--input);
+
+        Alert.alert('You pressed a cell');
 
         if (this.boardMatches(_.flatten(puzzle), solved)) {
             Alert.alert('Game Solved');
@@ -92,18 +94,26 @@ export default class Main extends Component {
 
             row.map((block) => {
                 var key = rows.length + '-' + blocks.length;
-                var blockSeperator = ((blocks.length == 2 || blocks.length == 5)) ? true : false;
+                var cellSeperator = ((blocks.length == 2 || blocks.length == 5)) ? true : false;
 
                 //block is a cell
                 //cell === null => return a userinput number
                 if (block === null) {
                     blocks.push(
-                        <View key={key} style={[styles.block, blockSeperator && styles.blockSeperator]}>
+                        /*
+                        <View key={key} style={[styles.cell, blockSeperator && styles.cellSeperator]}>
                             <TextInput
                                 clearTextOnFocus={true}
                                 keyboardType='number-pad'
-                                style={styles.textInput}
+                                style={styles.cellInput}
                                 onChangeText={(input) => this._onInput(key, input)}
+                            />
+                        </View>
+                        */
+                       <View key={key} style={[styles.cell, cellSeperator && styles.cellSeperator]}>
+                            <TouchableOpacity
+                                style={styles.cellInput}
+                                onPress={(input) => this._onInput(key, input)}
                             />
                         </View>
                     );
@@ -111,8 +121,8 @@ export default class Main extends Component {
                 //cell != null, return the prefilled number 
                 else {
                     blocks.push(
-                        <View key={key} style={[styles.block, blockSeperator && styles.blockSeperator]}>
-                            <Text style={styles.blockText}>{++block}</Text>
+                        <View key={key} style={[styles.cell, cellSeperator && styles.cellSeperator]}>
+                            <Text style={styles.cellText}>{++block}</Text>
                         </View>
                     );
                 }
@@ -138,6 +148,37 @@ export default class Main extends Component {
                 <View style={styles.container}>
                     {this.generateBoard()}
                 </View>
+                <View style={styles.footer}>
+                    <View style={styles.row}>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>2</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>3</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>4</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>5</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>6</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>7</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>8</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.numberControl}>
+                            <Text style={styles.numberControlText}>9</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
 
         );
@@ -145,12 +186,6 @@ export default class Main extends Component {
 }
 
 const styles = StyleSheet.create({
-    cell: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        borderWidth: 1 / PixelRatio.get(),
-        height: 40,
-    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -170,33 +205,51 @@ const styles = StyleSheet.create({
         borderTopWidth: 2,
         borderBottomWidth: 2,
     },
+    footer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+        paddingLeft: 25,
+        paddingRight: 25,
+    },
     row: {
-        //flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        //marginTop: 35,
-        //height: 40,
     },
     rowSeperator: {
         borderBottomWidth: 2,
     },
-    textInput: {
+    cell: {
+        flex: 1,
+        justifyContent: 'center',
+        borderWidth: 1 / PixelRatio.get(),
+        height: CellSize, //40
+    },
+    cellInput: {
         paddingBottom: 2,
         paddingLeft: 10,
         height: CellSize,
         fontSize: CellTextSize,
         backgroundColor: 'rgba(0, 0, 255, .1)'
     },
-    block: {
-        flex: 1,
-        justifyContent: 'center',
-        borderWidth: 1 / PixelRatio.get(),
-        height: CellSize, //40
-    },
-    blockSeperator: {
+    cellSeperator: {
         borderRightWidth: 2,
     },
-    blockText: {
+    cellText: {
+        fontSize: CellTextSize,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+    },
+    numberControl: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: CellSize,
+        height: CellSize,
+        backgroundColor: Color.DarkGreen,
+        borderWidth: 1,
+    },
+    numberControlText: {
         fontSize: CellTextSize,
         alignItems: 'center',
         justifyContent: 'center',
