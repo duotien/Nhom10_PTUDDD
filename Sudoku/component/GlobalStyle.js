@@ -15,4 +15,5 @@ export const CellTextSize = CellSize * 2 / 3;
 
 export const Color = {
     DarkGreen: '#31692c',
+    LightGreen: '#99ff9c',
 };
