@@ -19,8 +19,6 @@ import {
     Color,
 } from './component/GlobalStyle';
 
-import Grid from './component/Grid';
-
 // Sudoku = require('sudoku');
 import Sudoku from 'sudoku';
 var _ = require('lodash');
@@ -30,6 +28,7 @@ solvedpuzzle = Sudoku.solvepuzzle(fixedpuzzle);
 //import SudokuGrid from 'react-native-smart-sudoku-grid';
 
 //this is a single Cell in a Sudoku board
+/*
 class Cell extends Component {
     constructor(props) {
         super(props);
@@ -60,6 +59,7 @@ class Cell extends Component {
         );
     }
 }
+*/
 
 class NumberControl extends Component {
     constructor(props) {
@@ -79,24 +79,6 @@ class NumberControl extends Component {
         );
     }
 }
-
-/*class Board extends Component {
-    constructor(props) {
-        super(props);
-    }
-    
-    cells = [];
-
-    render() {
-        
-        return (
-            <View>
-
-            </View>
-        );
-    }
-}
-*/
 
 export default class Main extends Component {
     constructor(props) {
@@ -176,7 +158,7 @@ export default class Main extends Component {
 
     renderNumberControl() {
         const value = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-        var numbercontrol = [];
+        let numbercontrol = [];
         value.map((key) => {
             numbercontrol.push(
                 <NumberControl key={key} number={++key} onPress={this.getInput} ></NumberControl>
@@ -188,46 +170,30 @@ export default class Main extends Component {
     }
     
     generateBoard() {
-        var rows = [];
-        var blocks = [];
-        var inputcells = _.chunk(fixedpuzzle, 9);
+        let rows = [];
+        let blocks = [];
+        let inputcells = _.chunk(fixedpuzzle, 9);
         userpuzzle = _.chunk(this.state.puzzle, 9);
 
         inputcells.map((row) => {
-            var rowSeperator = ((rows.length == 2 || rows.length == 5)) ? true : false;
+            let rowSeperator = ((rows.length == 2 || rows.length == 5)) ? true : false;
 
             row.map((block) => {
-                var key = rows.length + '-' + blocks.length;
-                var cellSeperator = ((blocks.length == 2 || blocks.length == 5)) ? true : false;
+                let key = rows.length + '-' + blocks.length;
+                let cellSeperator = ((blocks.length == 2 || blocks.length == 5)) ? true : false;
 
                 //block is a cell
                 //cell === null => return a userinput number
                 if (block === null) {
                     blocks.push(
-                        /*
-                        <View key={key} style={[styles.cell, blockSeperator && styles.cellSeperator]}>
-                            <TextInput
-                                clearTextOnFocus={true}
-                                keyboardType='number-pad'
-                                style={styles.cellTextInput}
-                                onChangeText={(input) => this.onInput(key, input)}
-                            />
-                        </View>
-                        */
-                       
                        <View key={key} style={[styles.cell, cellSeperator && styles.cellSeperator]}>
                             <TouchableOpacity
                                 style={styles.cellTouchInput}
                                 onPress={() => this.onInput(key, this.state.selectednum)}
                             >
-                                <Text style={styles.cellTextInput}>{this.displayUserInput(key)}</Text>
+                                <Text style={styles.cellText}>{this.displayUserInput(key)}</Text>
                             </TouchableOpacity>
                         </View>
-                        /*
-                       <View key={key} style={[styles.cell, cellSeperator && styles.cellSeperator]}>
-                           <Cell index={key} onPress={() => this.onInput(key, this.state.selectednum)}></Cell>
-                       </View>
-                       */
                     );
                 }
                 //cell != null, return the prefilled number 
@@ -250,8 +216,8 @@ export default class Main extends Component {
     }
 
     render() {
-        console.log(this.state.selectednum);
-        console.log(userpuzzle);
+        //console.log(this.state.selectednum);
+        //console.log(userpuzzle);
         return (
             <View>
                 <View style={styles.header}>
@@ -265,11 +231,17 @@ export default class Main extends Component {
                 </View>
 
                 <View style={styles.footer}>
-                    <View style={styles.row}>
+                    <View style={styles.footerRow}>
                         {this.renderNumberControl()}
                     </View>
-                    <Button title='Reset' onPress={this.resetBoard}></Button>
-                    <Button title='Delete' onPress={this.deleteInput}></Button>
+                    <View style={styles.footerRow}>
+                        <TouchableOpacity style={styles.button} onPress={this.resetBoard}>
+                            <Text style={styles.cellText}>Reset</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={this.deleteInput}>
+                            <Text style={styles.cellText}>Delete</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
             /*
@@ -302,11 +274,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 2,
         borderBottomWidth: 2,
     },
-    boardContainer: {
-        alignItems: 'center',
-        alignSelf: 'center',
-        width: BoardWidth,
-    },
     footer: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -332,12 +299,12 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         height: CellSize,
         fontSize: CellTextSize,
-        backgroundColor: 'rgba(0, 255, 0, .1)'
+        backgroundColor: 'rgba(0, 255, 0, .1)',
     },
     cellTouchInput: {
         height: CellSize,
         fontSize: CellTextSize,
-        backgroundColor: 'rgba(0, 255, 0, .1)'
+        backgroundColor: 'rgba(0, 255, 0, .25)',
     },
     cellSeperator: {
         borderRightWidth: 2,
@@ -347,6 +314,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
+    },
+    footerRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     numberControl: {
         justifyContent: 'center',
@@ -361,5 +333,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
+    },
+    button: {
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
+        height: CellSize,
+        backgroundColor: Color.LightGreen,
+        borderWidth: 1,
     },
 });
