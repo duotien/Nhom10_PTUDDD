@@ -1,4 +1,4 @@
-import React, { Component, Dimensions } from 'react';
+import React, { Component } from 'react';
 import {
     Alert,
     StyleSheet,
@@ -8,7 +8,6 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity,
     View,
-    Button,
 } from 'react-native';
 
 import {
@@ -67,7 +66,7 @@ class NumberControl extends Component {
         this.onPress = this.onPress.bind(this);
     }
 
-    onPress () {
+    onPress() {
         this.props.onPress && this.props.onPress(this.props.number);
     }
 
@@ -105,7 +104,7 @@ export default class Main extends Component {
         let x = gridpoint[0];
         let y = gridpoint[1];
         userpuzzle[x][y] = parseInt(input);
-        this.setState({puzzle: _.flatten(userpuzzle)});
+        this.setState({ puzzle: _.flatten(userpuzzle) });
         //Alert.alert('You pressed a cell', key + '\n' + userpuzzle[x][y] + '\n' + input);
 
         if (this.boardMatches(_.flatten(userpuzzle), solvedpuzzle)) {
@@ -116,15 +115,15 @@ export default class Main extends Component {
     getInput(input) {
         //Alert.alert(String(input));
         //console.log('getInput executed');
-        this.setState({selectednum: parseInt(--input)});        
+        this.setState({ selectednum: parseInt(--input) });
     }
-    
+
     deleteInput() {
-        this.setState({selectednum: null});
+        this.setState({ selectednum: null });
     }
 
     resetBoard() {
-        this.setState({puzzle: fixedpuzzle});
+        this.setState({ puzzle: fixedpuzzle });
         userpuzzle = null;
     }
 
@@ -133,9 +132,9 @@ export default class Main extends Component {
         let x = gridpoint[0];
         let y = gridpoint[1];
         let number = userpuzzle[x][y];
-        return (number === null || isNaN(number))? '' : (number+1);
+        return (number === null || isNaN(number)) ? '' : (number + 1);
     }
-    
+
     boardMatches(b1, b2) {
         for (var i = 0; i < 81; i++) {
             if (b1[i] != b2[i]) {
@@ -168,7 +167,7 @@ export default class Main extends Component {
             <View style={styles.row}>{numbercontrol}</View>
         );
     }
-    
+
     generateBoard() {
         let rows = [];
         let blocks = [];
@@ -186,7 +185,7 @@ export default class Main extends Component {
                 //cell === null => return a userinput number
                 if (block === null) {
                     blocks.push(
-                       <View key={key} style={[styles.cell, cellSeperator && styles.cellSeperator]}>
+                        <View key={key} style={[styles.cell, cellSeperator && styles.cellSeperator]}>
                             <TouchableOpacity
                                 style={styles.cellTouchInput}
                                 onPress={() => this.onInput(key, this.state.selectednum)}
@@ -225,7 +224,7 @@ export default class Main extends Component {
                     <Text style={styles.headerText}>Sudoku</Text>
                     <TouchableOpacity onPress={this.newGame}><Text>New Game</Text></TouchableOpacity>
                 </View>
-                
+
                 <View style={styles.container}>
                     {this.generateBoard()}
                 </View>
