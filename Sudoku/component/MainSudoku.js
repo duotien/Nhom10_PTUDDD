@@ -4,8 +4,7 @@ import {
     StyleSheet,
     PixelRatio,
     Text,
-    TextInput,
-    TouchableWithoutFeedback,
+    Picker,
     TouchableOpacity,
     View,
 } from 'react-native';
@@ -16,7 +15,7 @@ import {
     BorderWidth,
     CellTextSize,
     Color,
-} from './component/GlobalStyle';
+} from './GlobalStyle';
 
 // Sudoku = require('sudoku');
 import Sudoku from 'sudoku';
@@ -84,6 +83,7 @@ export default class Main extends Component {
         super(props);
         this.state = {
             puzzle: fixedpuzzle,
+            difficulty: Sudoku.ratepuzzle(fixedpuzzle, 10),
             selectednum: null,
         }
         this.onInput = this.onInput.bind(this);
@@ -146,7 +146,7 @@ export default class Main extends Component {
 
     newGame() {
         fixedpuzzle = Sudoku.makepuzzle();
-        this.setState({ puzzle: fixedpuzzle });
+        this.setState({ puzzle: fixedpuzzle, difficulty: Sudoku.ratepuzzle(fixedpuzzle, 10)});
         solvedpuzzle = Sudoku.solvepuzzle(fixedpuzzle);
     }
 
@@ -217,6 +217,8 @@ export default class Main extends Component {
     render() {
         //console.log(this.state.selectednum);
         //console.log(userpuzzle);
+        //console.log(this.state.puzzle);
+        console.log(this.state.difficulty);
         return (
             <View>
                 <View style={styles.header}>
