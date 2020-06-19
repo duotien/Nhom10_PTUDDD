@@ -26,12 +26,15 @@ function HomeScreen({ navigation }) {
 		</View>
 	);
 }
-function GameScreen() {
-	return (
-		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<MainSudoku></MainSudoku>
-		</View>
-	)
+class GameScreen extends React.Component {
+	
+	render() {
+		return (
+			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+				<MainSudoku></MainSudoku>
+			</View>
+		);
+	}
 }
 
 function SettingsScreen() {

@@ -4,11 +4,9 @@ import {
     StyleSheet,
     PixelRatio,
     Text,
-    Picker,
     TouchableOpacity,
     View,
 } from 'react-native';
-
 import {
     BoardWidth,
     CellSize,
@@ -16,48 +14,13 @@ import {
     CellTextSize,
     Color,
 } from './GlobalStyle';
-
-// Sudoku = require('sudoku');
 import Sudoku from 'sudoku';
+
+const difficultyrate = 5;
 var _ = require('lodash');
 var userpuzzle, fixedpuzzle, solvedpuzzle;
 fixedpuzzle = Sudoku.makepuzzle();
 solvedpuzzle = Sudoku.solvepuzzle(fixedpuzzle);
-//import SudokuGrid from 'react-native-smart-sudoku-grid';
-
-//this is a single Cell in a Sudoku board
-/*
-class Cell extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            number: null,
-        }
-        this.onPress = this.onPress.bind(this);
-        this.setNumber = this.setNumber.bind(this);
-    }
-
-    setNumber(input) {
-        this.setState({number: input})
-    }
-
-    onPress () {
-        this.props.onPress && this.props.onPress(this.props.index, this.state.number);
-        //this.setState({number: input});
-    }
-
-    render() {
-        return (
-            <TouchableOpacity
-                style={styles.cellTouchInput}
-                onPress={this.onPress}
-            >
-                <Text style={styles.cellTextInput}>{(this.state.number === null)? '' : this.state.number}</Text>
-            </TouchableOpacity>
-        );
-    }
-}
-*/
 
 class NumberControl extends Component {
     constructor(props) {
@@ -83,7 +46,7 @@ export default class Main extends Component {
         super(props);
         this.state = {
             puzzle: fixedpuzzle,
-            difficulty: Sudoku.ratepuzzle(fixedpuzzle, 10),
+            difficulty: Sudoku.ratepuzzle(fixedpuzzle, difficultyrate),
             selectednum: null,
         }
         this.onInput = this.onInput.bind(this);
@@ -95,26 +58,20 @@ export default class Main extends Component {
         this.displayUserInput = this.displayUserInput.bind(this);
         this.resetBoard = this.resetBoard.bind(this);
         this.deleteInput = this.deleteInput.bind(this);
-        //console.log(_.chunk(this.state.puzzle,9));
     }
 
     onInput(key, input) {
-        //var solved = Sudoku.solvepuzzle(_.flatten(this.state.puzzle));
         let gridpoint = key.split('-');
         let x = gridpoint[0];
         let y = gridpoint[1];
         userpuzzle[x][y] = parseInt(input);
         this.setState({ puzzle: _.flatten(userpuzzle) });
-        //Alert.alert('You pressed a cell', key + '\n' + userpuzzle[x][y] + '\n' + input);
-
         if (this.boardMatches(_.flatten(userpuzzle), solvedpuzzle)) {
-            Alert.alert('Game Solved');
+            Alert.alert('Congratulation!!!', 'You have solved the puzzle');
         }
     }
 
     getInput(input) {
-        //Alert.alert(String(input));
-        //console.log('getInput executed');
         this.setState({ selectednum: parseInt(--input) });
     }
 
@@ -146,7 +103,7 @@ export default class Main extends Component {
 
     newGame() {
         fixedpuzzle = Sudoku.makepuzzle();
-        this.setState({ puzzle: fixedpuzzle, difficulty: Sudoku.ratepuzzle(fixedpuzzle, 10)});
+        this.setState({ puzzle: fixedpuzzle, difficulty: Sudoku.ratepuzzle(fixedpuzzle, difficultyrate) });
         solvedpuzzle = Sudoku.solvepuzzle(fixedpuzzle);
     }
 
@@ -180,7 +137,6 @@ export default class Main extends Component {
             row.map((block) => {
                 let key = rows.length + '-' + blocks.length;
                 let cellSeperator = ((blocks.length == 2 || blocks.length == 5)) ? true : false;
-
                 //block is a cell
                 //cell === null => return a userinput number
                 if (block === null) {
@@ -215,10 +171,6 @@ export default class Main extends Component {
     }
 
     render() {
-        //console.log(this.state.selectednum);
-        //console.log(userpuzzle);
-        //console.log(this.state.puzzle);
-        console.log(this.state.difficulty);
         return (
             <View>
                 <View style={styles.header}>
@@ -245,11 +197,6 @@ export default class Main extends Component {
                     </View>
                 </View>
             </View>
-            /*
-            <View style={styles.boardContainer}>
-                <Grid ref={ref => ref && (this.cells = ref.cells)}></Grid>
-            </View>
-            */
         );
     }
 }
